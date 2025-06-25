@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Go Grab Consume - Recipes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(120deg, beige 60%, #2c3e50 40%);
+  color: #fff;
+  background-attachment: fixed;
+}
+    .navbar {
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar a {
+      color: #fff;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .recipes-section {
+      text-align: center;
+      padding: 4rem 2rem 2rem 2rem;
+    }
+    .recipes-section h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .recipes-section p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .section-layout {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 3rem 6rem;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .info-box {
+      flex: 1;
+      background-color: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+    .info-box h2 {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+    }
+    .info-box p, .info-box ul {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+    .info-box ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .info-box ul li::before {
+      content: "✅ ";
+    }
+    .section-img {
+      flex: 1;
+      max-width: 400px;
+    }
+    .section-img img {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+    }
+    .instructions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 3rem 6rem;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .instructions-content {
+      background-color: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+      font-size: 1rem;
+      line-height: 1.7;
+      flex: 1;
+    }
+    .instructions-content h3 {
+      margin-top: 0;
+    }
+    .nutrition-toggle {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .nutrition-toggle button {
+      background-color: #ffaa00;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0 0.5rem;
+      transition: background 0.3s;
+    }
+    .nutrition-toggle button:hover {
+      background-color: #ffc04d;
+    }
+    .nutrition-section {
+  margin: 3rem 6rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px); /* Increased blur */
+  -webkit-backdrop-filter: blur(20px);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 2px solid black(255, 204, 0, 0.3); /* glowing golden edge */
+  transition: 0.3s ease-in-out;
+  background-color: grey(0, 0, 0, 0.3);
+
+}
+
+.nutrition-section h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #ffd966;
+}
+
+.toggle-box {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+}
+
+.toggle-box button {
+  background-color: #ffcc00;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  margin-left: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+.toggle-box button:hover {
+  background-color: #ffdb4d;
+}
+
+.nutrition-table {
+  width: 100%;
+  font-size: 0.9rem;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  border: 2px solid rgba(255, 204, 0, 0.6);
+}
+
+.nutrition-table th,
+.nutrition-table td {
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.nutrition-table th {
+  background-color: rgba(255, 204, 0, 0.2);
+  color: #fff;
+}
+
+.nutrition-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+
+    .tip-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #ffaa00;
+  color: #000;
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+}
+
+.tip-box {
+  display: none;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  padding: 1rem;
+  border-radius: 12px;
+  max-width: 300px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  z-index: 998;
+}
+
+.intro-animation {
+  text-align: center;
+  margin: 3rem 6rem;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+  border-radius: 15px;
+  animation: fadeInSlideUp 1.2s ease forwards;
+  opacity: 0;
+  transform: translateY(30px);
+  color: #fff;
+}
+
+@keyframes fadeInSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-animation h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.intro-animation p {
+  font-size: 1.05rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.wave-divider svg {
+  width: 100%;
+  height: 80px;
+  display: block;
+}
+
+.animated-bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.animated-bg .circle {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  animation: floatUp 20s linear infinite;
+  transform: translateY(100vh);
+}
+
+.animated-bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.animated-bg .emoji {
+  position: absolute;
+  font-size: 2rem;
+  opacity: 0;
+  animation: floatEmoji 20s linear infinite;
+}
+
+@keyframes floatEmoji {
+  0% {
+    transform: translateY(100vh) translateX(-20px) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.3;
+  }
+  80% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-200px) translateX(20px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.marquee-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin: 3rem 0;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: scroll-marquee 40s linear infinite;
+}
+
+.marquee-track img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  margin-right: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Infinite scrolling animation */
+@keyframes scroll-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.tooltip {
+  position: relative;
+  cursor: help;
+  color: #ffd966;
+  font-weight: 500;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 220px;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  text-align: left;
+  border-radius: 8px;
+  padding: 0.6rem;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%; /* position above the ingredient */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+  </style>
+</head>
+<!-- Tip Box -->
+<div class="tip-box" id="tipBox">
+  <strong>💡 Tips</strong><br>
+  Want more protein? Add a boiled egg or a spoon of Greek yogurt.<br><br>
+  For extra flavor, marinate the chicken in soy sauce, lemon, and garlic for 30 mins before cooking.<br><br>
+  Swap rice for quinoa for extra fiber and micronutrients.
+</div>
+
+<!-- Floating Button -->
+<button class="tip-button" onclick="toggleTip()">💡 Tips</button>
+
+<body>
+<body>
+  <div class="animated-bg">
+    <span class="emoji" style="top: 20%; left: 10%;">🍗</span>
+    <span class="emoji" style="top: 35%; left: 80%; animation-delay: 3s;">🥦</span>
+    <span class="emoji" style="top: 55%; left: 30%; animation-delay: 6s;">🍚</span>
+    <span class="emoji" style="top: 75%; left: 50%; animation-delay: 9s;">🧂</span>
+    <span class="emoji" style="top: 45%; left: 65%; animation-delay: 12s;">🔥</span>
+  </div>
+
+  <!-- Your rest of the page content here -->
+</body>
+
+  <div class="navbar">
+    <div style="font-size: 1.5rem; font-weight: bold;">Go Grab Consume</div>
+    <div>
+      <a href="dash.html">Home</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+  </div>
+
+
+
+  <section class="recipes-section">
+    <h1 style="color: #000;">Explore Our Chicken & Rice Bowls</h1>
+    <p style="color: #000;">From classic grilled to spicy teriyaki, every bowl is made with love, nutrition, and flavor in mind. Dive into our recipes curated specially for night owls and fitness lovers.</p>
+  </section>
+
+    <div class="intro-animation">
+  <h2 style="color: #000;">Fuel Your Body Right 💪</h2>
+  <p style="color: #000;">Wholesome. Nutritious. Packed with flavor — our chicken & rice bowl is crafted to energize your late nights and workouts.</p>
+</div>
+ <br><hr>
+<div class="marquee-wrapper">
+  <div class="marquee-track">
+    <img src="scroll2.jpg" />
+    <img src="scroll3.jpg" />
+    <img src="scroll4.jpg" />
+    <img src="scroll5.jpg" />
+    <img src="second.jpg" />
+    <!-- Duplicate for seamless loop -->
+    <img src="scroll2.jpg" />
+    <img src="scroll3.jpg" />
+    <img src="scroll4.jpg" />
+    <img src="scroll5.jpg" />
+    <img src="second.jpg" />
+  </div>
+</div><hr>
+<br>
+
+
+
+  <section class="section-layout">
+    <div class="info-box">
+      <h2 style="color: #000;">🍗🥦 Chicken Rice with Vegetables</h2>
+      <p style="color: #000;">🕒 Prep Time: 10 min<br>🧑‍🍳 Cook Time: 20–25 min<br>🍽 Serves: 1</p>
+    </div>
+    <div class="section-img">
+      
+    </div>
+  </section>
+
+      <!-- Section Divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <path d="M0,0 C480,100 960,0 1440,100 L1440,120 L0,120 Z" fill="#1e130c" />
+  </svg>
+</div>
+  <section class="section-layout">
+    <div class="section-img">
+    </div>
+    <div class="info-box">
+      <h2 style="color: #000;">✅ Ingredients</h2>
+      <ul>
+        <li style="color: #000;"><strong>Protein & Carbs:</strong></li>
+        <li><span class="tooltip" style="color:black;">150g chicken breast<span class="tooltip-text">Lean protein source. High in B vitamins and ideal for muscle recovery.</span></span></li>
+        <li><span class="tooltip" style="color: black;">1 cup (100g) uncooked white rice (or brown rice)<span class="tooltip-text">Great source of quick carbs. Use brown rice for more fiber.</span></span></li>
+        <li style="color: #000;"><strong>Vegetables:</strong></li>
+        <li><span class="tooltip" style="color: black;">1/2 cup carrots, thinly sliced<span class="tooltip-text">Loaded with beta-carotene (Vitamin A). Supports eye and skin health.</span></span></li>
+        <li><span class="tooltip" style="color: black;">1/2 cup broccoli florets<span class="tooltip-text">>High in Vitamin C & K. Boosts immunity and bone strength.</span></span></li>
+        <li><span class="tooltip" style="color: black;">1/2 cup bell peppers, chopped (any color)<span class="tooltip-text">Rich in antioxidants. Adds vibrant color and crunch.</span></span></li>
+        <li><span class="tooltip" style="color: black;">1 tbsp olive oil (for cooking)<span class="tooltip-text">Heart-healthy fats. Anti-inflammatory and antioxidant benefits.</span></span></li>
+        <li style="color: #000;"><strong>Seasoning:</strong></li>
+        <li><span class="tooltip" style="color: black;">1/2 tsp salt<span class="tooltip-text">Essential mineral. Helps balance fluids, but use moderately.</span></span></li>
+        <li><span class="tooltip" style="color: black;">1/2 tsp black pepper<span class="tooltip-text">Aids digestion and has antioxidant properties.</span></span></li>
+        <li><span class="tooltip" style="color: black;">1 tsp paprika or chili flakes (optional)<span class="tooltip-text">Adds flavor & antioxidants. Mildly spicy!</span></span></li>
+        <li><span class="tooltip" style="color: black;">1 tsp garlic powder or 1 clove fresh garlic<span class="tooltip-text">Boosts immunity and adds a strong savory punch.</span></span></li>
+        <li><span class="tooltip" style="color: black;">Juice of 1/2 lemon (optional, for freshness)<span class="tooltip-text">Fresh citrus taste. Adds Vitamin C and helps with iron absorption.</span></span></li>
+      </ul>
+    </div>
+  </section>
+<!-- Section Divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <path d="M0,0 C480,100 960,0 1440,100 L1440,120 L0,120 Z" fill="#1e130c" />
+  </svg>
+</div>
+
+  <section class="instructions">
+    <div class="instructions-content">
+      <h3 style="color: #000;">🍳 Instructions</h3>
+      <p style="color: #000;"><strong>Cook the Rice:</strong><br>
+      Rinse the rice and boil with 2 cups of water and a pinch of salt.<br>
+      Simmer for ~15 minutes until water is absorbed and rice is tender.<br>
+      Set aside and fluff with a fork.</p>
+
+      <p style="color: #000;"><strong>Cook the Chicken:</strong><br>
+      Season chicken breasts with salt, pepper, paprika, and garlic.<br>
+      Heat 1/2 tbsp olive oil in a pan.<br>
+      Cook chicken over medium heat for 6–7 minutes on each side, until fully cooked and golden brown.<br>
+      Let it rest for 2–3 min, then slice.</p>
+
+      <p style="color: #000;"><strong>Stir-Fry the Vegetables:</strong><br>
+      In the same pan, add 1/2 tbsp olive oil.<br>
+      Add chopped vegetables and stir-fry for 4–5 minutes until slightly tender but still vibrant.<br>
+      Optionally season with a little salt and lemon juice.</p>
+
+      <p style="color: #000;"><strong>Assemble the Bowl:</strong><br>
+      Add a layer of rice to a bowl or plate.<br>
+      Top with sliced chicken and sautéed vegetables.<br>
+      Optional: garnish with fresh herbs (parsley or coriander) or a dollop of yogurt or hummus.</p>
+    </div>
+    <div class="section-img">
+      
+    </div>
+  </section>
+
+  <!-- Section Divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+    <path d="M0,0 C480,100 960,0 1440,100 L1440,120 L0,120 Z" fill="#1e130c" />
+  </svg>
+</div>
+  <section class="nutrition-section" id="nutrition">
+  <h2 style="color: #000;">🍽 Nutrition Info (Per Serving)</h2>
+
+  <div class="toggle-box">
+    <button onclick="showTable()">📊 Table</button>
+    <button onclick="showChart()">📈 Chart</button>
+  </div>
+
+  <div id="nutritionContent">
+    <table class="nutrition-table">
+      <tr style="color: #000;"><th>Nutrient</th><th>Amount</th><th>Notes</th></tr>
+      <tr style="color: #000;"><td>Calories</td><td>~525 kcal</td><td>Balanced energy</td></tr>
+      <tr style="color: #000;"><td>Protein</td><td>42 g</td><td>Lean source (chicken)</td></tr>
+      <tr style="color: #000;"><td>Carbohydrates</td><td>48 g</td><td>From rice & veggies</td></tr>
+      <tr style="color: #000;"><td>Sugar</td><td>5 g</td><td>Natural from vegetables</td></tr>
+      <tr style="color: #000;"><td>Fat</td><td>13.5 g</td><td>Healthy fats from oil</td></tr>
+      <tr style="color: #000;"><td>Fiber</td><td>6 g</td><td>Helps digestion</td></tr>
+      <tr style="color: #000;"><td>Cholesterol</td><td>90 mg</td><td>From chicken</td></tr>
+      <tr style="color: #000;"><td>Sodium</td><td>350 mg</td><td>Seasoning dependent</td></tr>
+    </table>
+
+    <canvas id="nutritionChart" width="900" height="400" style="display: none;"></canvas>
+  </div>
+</section>
+
+  <script>
+    function showChart() {
+      document.getElementById("nutrition-table").style.display = "none";
+      document.getElementById("nutrition-chart").style.display = "block";
+    }
+    function showTable() {
+      document.getElementById("nutrition-chart").style.display = "none";
+      document.getElementById("nutrition-table").style.display = "block";
+    }
+    window.onload = function () {
+      new Chart(document.getElementById("nutritionCanvas").getContext("2d"), {
+        type: 'bar',
+        data: {
+          labels: ['Calories', 'Protein', 'Carbs', 'Fat', 'Fiber', 'Cholesterol', 'Sodium'],
+          datasets: [{
+            label: 'Amount',
+            data: [525, 42, 48, 13.5, 6, 90, 350],
+            backgroundColor: ['#ffcc00', '#00cc99', '#3399ff', '#ff6666', '#66cc66', '#cc99ff', '#ffaa00']
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    };
+    function toggleTip() {
+  const tipBox = document.getElementById("tipBox");
+  tipBox.style.display = tipBox.style.display === "block" ? "none" : "block";
+}
+
+
+  function showChart() {
+    document.querySelector(".nutrition-table").style.display = "none";
+    document.getElementById("nutritionChart").style.display = "block";
+  }
+
+  function showTable() {
+    document.getElementById("nutritionChart").style.display = "none";
+    document.querySelector(".nutrition-table").style.display = "table";
+  }
+
+  window.onload = function () {
+    const ctx = document.getElementById("nutritionChart").getContext("2d");
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Calories', 'Protein', 'Carbs', 'Sugar', 'Fat', 'Fiber', 'Cholesterol', 'Sodium'],
+        datasets: [{
+          label: 'Amount',
+          data: [525, 42, 48, 5, 13.5, 6, 90, 350],
+          backgroundColor: ['#ffc107', '#00c9a7', '#00b0ff', '#ff6f61', '#f48fb1', '#aed581', '#ba68c8', '#fbc02d']
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { color: "#fff" }
+          },
+          x: {
+            ticks: { color: "#fff" }
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  };
+</script>
+
+  </script>
+
+</body>
+</html>

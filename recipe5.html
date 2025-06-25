@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic Circle with Auto Transitions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+  .flying-arrow {
+    stroke: #64748b;
+    stroke-width: 2;
+    fill: none;
+    marker-end: url(#arrowhead);
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: fly-arrow 2.5s ease-in-out infinite;
+  }
+
+  @keyframes fly-arrow {
+    0% {
+      stroke-dashoffset: 200;
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+
+  .delay-\[0s\]    { animation-delay: 0s; }
+  .delay-\[0\.3s\] { animation-delay: 0.3s; }
+  .delay-\[0\.6s\] { animation-delay: 0.6s; }
+  .delay-\[0\.9s\] { animation-delay: 0.9s; }
+  .delay-\[1\.2s\] { animation-delay: 1.2s; }
+  .delay-\[1\.5s\] { animation-delay: 1.5s; }
+  .delay-\[1\.8s\] { animation-delay: 1.8s; }
+  .delay-\[2\.1s\] { animation-delay: 2.1s; }
+
+
+  .scroll-fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+  }
+
+  .scroll-fade-up.show {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen relative overflow-x-hidden">
+
+      <nav class="bg-white bg-opacity-80 shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50 backdrop-blur-md">
+    <div class="text-xl font-bold text-gray-900">GoBites</div>
+    <ul class="flex space-x-6 text-gray-700 font-medium">
+      <li><a href="dash2.html">Home</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+<section id="topHero" class="relative min-h-screen bg-gray-100 overflow-hidden">
+
+  <div class="absolute left-16 top-1/2 transform -translate-y-1/2 z-40 max-w-md">
+  <h1 class="text-6xl font-extrabold text-gray-900 tracking-tight leading-tight">
+    Go Bites
+  </h1>
+  <p class="mt-4 text-2xl font-medium text-gray-700">
+    Chicken & Rice, Reimagined for the Craving Generation 🍗🍚
+  </p>
+</div>
+  <!-- Right-Side Circle Stack -->
+  <div class="absolute right-0 top-1/2 transform -translate-y-1/2 z-0 pointer-events-none">
+    
+    <!-- BACK HALF CIRCLE -->
+    <div class="w-[430px] h-[700px] overflow-hidden absolute right-0 top-1/2 transform -translate-y-1/2 rotate-180 z-10">
+      <div id="semiCircle" class="w-[850px] h-[700px] bg-blue-200 rounded-full transform translate-x-[-50%] transition-colors duration-700 ease-in-out"></div>
+    </div>
+
+    <!-- FRONT FULL CIRCLE WITH IMAGE -->
+      <div class="w-[440px] h-[440px] bg-blue-100 rounded-full absolute right-24 top-1/2 transform -translate-y-1/2 z-20 overflow-hidden flex items-center justify-center">
+      <img id="circleImage" src="https://source.unsplash.com/540x540/?salad" alt="Dish" class="w-full h-full object-cover transition-opacity duration-700 ease-in-out opacity-90" />
+    </div>
+  </div>
+
+  </section>
+  <!-- Script to Auto-Transition -->
+  <script>
+    const images = [
+      {
+        src: "scroll2.jpg",
+        color: "#b9fbc0",
+      },
+      {
+        src: "scroll3.jpg",
+        color: "#cdb4db",
+      },
+      {
+        src: "first.jpg",
+        color: "#ffdab9",
+      },
+      {
+        src: "scroll4.jpg",
+        color: "#bae6fd",
+      },
+    ];
+
+    const imageEl = document.getElementById("circleImage");
+    const semiCircleEl = document.getElementById("semiCircle");
+    let currentIndex = 0;
+
+    function updateImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      imageEl.src = images[currentIndex].src;
+      semiCircleEl.style.backgroundColor = images[currentIndex].color;
+    }
+
+    // Start auto-transition every 3 seconds
+    setInterval(updateImage, 3000);
+  </script>  
+<!-- 🟨 Section: Prep Cards -->
+<section class="relative bg-gray-100 min-h-screen px-16 pt-32 overflow-hidden">
+  <!-- 🏷️ Heading -->
+  <h2 class="text-5xl font-bold text-gray-900 mb-16">
+    Ready, Set, <span class="text-blue-500">Prep!</span> 🍳
+  </h2>
+
+  <!-- 🍽️ New Layout -->
+  <div class="grid grid-cols-2 gap-12 items-center">
+    <!-- 🖼️ Left: Image -->
+    <div class="flex justify-center">
+      <img src="first.jpg" alt="Chicken and Rice Bowl"
+           class="rounded-2xl shadow-xl w-[500px] h-[500px] object-cover">
+    </div>
+
+    <!-- 📦 Main Content -->
+  <div class="relative w-full h-[600px]">
+
+    <!-- 🔥 Content Grid -->
+    <div class="flex justify-between items-center w-full h-full relative z-10">
+      
+      <!-- 🍲 Dish Image -->
+    
+
+      <!-- 🥕 Ingredients Right Column -->
+      <div class="flex flex-col justify-between h-[500px] pr-16 items-end w-[400px] absolute right-8 top-0 z-40">
+
+        <!-- 👇 Repeat for each ingredient -->
+        <div class="flex items-center space-x-4 justify-end">
+          <p class="text-gray-800 text-sm font-semibold text-right">150g Chicken Breast</p>
+          <div class="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md shadow-lg overflow-hidden border-2 border-white">
+            <img src="chick.jpeg" alt="Chicken" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4 justify-end">
+          <p class="text-gray-800 text-sm font-semibold text-right">1 cup White Rice</p>
+          <div class="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md shadow-lg overflow-hidden border-2 border-white">
+            <img src="rice.jpeg" alt="Rice" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4 justify-end">
+          <p class="text-gray-800 text-sm font-semibold text-right">½ cup Carrots</p>
+          <div class="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md shadow-lg overflow-hidden border-2 border-white">
+            <img src="carrot.jpeg" alt="Carrots" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4 justify-end">
+          <p class="text-gray-800 text-sm font-semibold text-right">½ cup Broccoli</p>
+          <div class="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md shadow-lg overflow-hidden border-2 border-white">
+            <img src="broccoli.jpeg" alt="Broccoli" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4 justify-end">
+          <p class="text-gray-800 text-sm font-semibold text-right">½ cup Bell Peppers</p>
+          <div class="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md shadow-lg overflow-hidden border-2 border-white">
+            <img src="bell.jpeg" alt="Bell Pepper" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4 justify-end">
+          <p class="text-gray-800 text-sm font-semibold text-right">1 tbsp Olive Oil</p>
+          <div class="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md shadow-lg overflow-hidden border-2 border-white">
+            <img src="olive.jpeg" alt="Olive Oil" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4 justify-end">
+          <p class="text-gray-800 text-sm font-semibold text-right">Salt to taste</p>
+          <div class="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md shadow-lg overflow-hidden border-2 border-white">
+            <img src="salt.jpeg" alt="Salt" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4 justify-end">
+          <p class="text-gray-800 text-sm font-semibold text-right">¼ tsp Paprika</p>
+          <div class="w-16 h-16 rounded-full bg-white/30 backdrop-blur-md shadow-lg overflow-hidden border-2 border-white">
+            <img src="pap.jpeg" alt="Paprika" class="w-full h-full object-cover">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+     <!-- 🎯 Animated Arrows -->
+    <svg class="absolute inset-0 w-full h-full pointer-events-none z-30" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
+        </marker>
+      </defs>
+      <!-- ✈️ Flying arrows from each ingredient -->
+      <!-- ✈️ Flying arrows from each ingredient (moved lower) -->
+<path d="M 1080 320 Q 900 440 700 500" class="flying-arrow delay-[0s]" />
+<path d="M 1080 370 Q 910 460 700 500" class="flying-arrow delay-[0.3s]" />
+<path d="M 1080 420 Q 920 480 700 500" class="flying-arrow delay-[0.6s]" />
+<path d="M 1080 470 Q 930 500 700 500" class="flying-arrow delay-[0.9s]" />
+<path d="M 1080 520 Q 940 510 700 500" class="flying-arrow delay-[1.2s]" />
+<path d="M 1080 570 Q 950 520 700 500" class="flying-arrow delay-[1.5s]" />
+<path d="M 1080 620 Q 960 530 700 500" class="flying-arrow delay-[1.8s]" />
+<path d="M 1080 670 Q 970 540 700 500" class="flying-arrow delay-[2.1s]" />
+    </svg>
+
+  </div>
+</section>
+
+<!-- 🧾 Instructions Section with Enhancements -->
+<section class="mt-32 px-16">
+  <h2 class="text-4xl font-bold text-gray-900 mb-12">
+    Step-by-Step <span class="text-blue-500">Instructions</span> 📝
+  </h2>
+
+  <div class="space-y-12 relative border-l-4 border-blue-200 pl-8">
+
+    <!-- 🔹 Step 1 -->
+    <div class="relative group transition-all duration-500 hover:scale-[1.02]">
+      <div class="absolute -left-5 top-1 w-4 h-4 bg-blue-500 rounded-full shadow-md animate-pulse"></div>
+      <h3 class="text-xl font-bold text-gray-800 mb-1 flex items-center gap-2">
+        1. Cook the Rice 🍚 <span class="text-sm text-gray-500">⏱️ ~15 min</span>
+      </h3>
+      <p class="text-gray-600 leading-relaxed">
+        Rinse the rice and boil with 2 cups of water and a pinch of salt.<br>
+        Simmer for ~15 minutes until water is absorbed and rice is tender.<br>
+        Set aside and fluff with a fork.
+      </p>
+    </div>
+
+    <!-- 🔹 Step 2 -->
+    <div class="relative group transition-all duration-500 hover:scale-[1.02]">
+      <div class="absolute -left-5 top-1 w-4 h-4 bg-blue-500 rounded-full shadow-md animate-pulse"></div>
+      <h3 class="text-xl font-bold text-gray-800 mb-1 flex items-center gap-2">
+        2. Cook the Chicken 🍗 <span class="text-sm text-gray-500">⏱️ ~15 min</span>
+      </h3>
+      <p class="text-gray-600 leading-relaxed">
+        Season chicken breasts with salt, pepper, paprika, and garlic.<br>
+        Heat 1/2 tbsp olive oil in a pan.<br>
+        Cook chicken over medium heat for 6–7 minutes on each side, until fully cooked and golden brown.<br>
+        Let it rest for 2–3 min, then slice.
+      </p>
+    </div>
+
+    <!-- 🔹 Step 3 -->
+    <div class="relative group transition-all duration-500 hover:scale-[1.02]">
+      <div class="absolute -left-5 top-1 w-4 h-4 bg-blue-500 rounded-full shadow-md animate-pulse"></div>
+      <h3 class="text-xl font-bold text-gray-800 mb-1 flex items-center gap-2">
+        3. Stir-Fry the Vegetables 🥕 <span class="text-sm text-gray-500">⏱️ ~5 min</span>
+      </h3>
+      <p class="text-gray-600 leading-relaxed">
+        In the same pan, add 1/2 tbsp olive oil.<br>
+        Add chopped vegetables and stir-fry for 4–5 minutes until slightly tender but still vibrant.<br>
+        Optionally season with a little salt and lemon juice.
+      </p>
+    </div>
+
+    <!-- 🔹 Step 4 -->
+    <div class="relative group transition-all duration-500 hover:scale-[1.02]">
+      <div class="absolute -left-5 top-1 w-4 h-4 bg-blue-500 rounded-full shadow-md animate-pulse"></div>
+      <h3 class="text-xl font-bold text-gray-800 mb-1 flex items-center gap-2">
+        4. Assemble the Bowl 🍽️ <span class="text-sm text-gray-500">⏱️ ~2 min</span>
+      </h3>
+      <p class="text-gray-600 leading-relaxed">
+        Add a layer of rice to a bowl or plate.<br>
+        Top with sliced chicken and sautéed vegetables.<br>
+        Optional: garnish with fresh herbs (parsley or coriander) or a dollop of yogurt or hummus.
+      </p>
+    </div>
+
+  </div>
+</section>
+<!-- 💪 Nutrition Section (Full row, no scroll) -->
+<div class="w-full max-w-6xl mx-auto mt-32 px-8">
+  
+  <!-- 🏷️ Left-Aligned Heading -->
+  <h2 class="text-4xl font-bold text-gray-800 mb-12 text-left ">
+    Nutrition Breakdown <span class="text-orange-500">— Power in Every Bite!</span> 🍴
+  </h2>
+
+  <!-- Nutrition Cards Row -->
+  <div class="w-full flex flex-wrap gap-6 justify-between">
+    
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Calories</h3>
+      <p class="text-3xl font-bold text-orange-400 my-2">~500</p>
+      <p class="text-sm text-gray-600">Balanced energy</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Protein</h3>
+      <p class="text-3xl font-bold text-green-500 my-2">40–45g</p>
+      <p class="text-sm text-gray-600">From chicken</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Carbs</h3>
+      <p class="text-3xl font-bold text-blue-400 my-2">45–50g</p>
+      <p class="text-sm text-gray-600">Rice + veggies</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Fats</h3>
+      <p class="text-3xl font-bold text-pink-400 my-2">12–15g</p>
+      <p class="text-sm text-gray-600">Olive oil</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Fiber</h3>
+      <p class="text-3xl font-bold text-emerald-500 my-2">5–7g</p>
+      <p class="text-sm text-gray-600">From vegetables</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Sodium</h3>
+      <p class="text-3xl font-bold text-red-400 my-2">300–400mg</p>
+      <p class="text-sm text-gray-600">From seasoning</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Sugar</h3>
+      <p class="text-3xl font-bold text-red-400 my-2">5 g</p>
+      <p class="text-sm text-gray-600">Natural sugars from vegetables </p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Cholesterol</h3>
+      <p class="text-3xl font-bold text-red-400 my-2">80–100 mg</p>
+      <p class="text-sm text-gray-600"> From chicken</p>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Vitamin A</h3>
+      <p class="text-3xl font-bold text-red-400 my-2">100% DV</p>
+      <p class="text-sm text-gray-600"> From Carrots, bell peppers</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Vitamin C</h3>
+      <p class="text-3xl font-bold text-red-400 my-2">80-90% DV</p>
+      <p class="text-sm text-gray-600"> From Bell peppers, broccoli</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Calcium</h3>
+      <p class="text-3xl font-bold text-red-400 my-2">6–8% DV</p>
+      <p class="text-sm text-gray-600"> From vegetables</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-md p-6 w-60 text-center">
+      <h3 class="text-lg font-semibold">Iron</h3>
+      <p class="text-3xl font-bold text-red-400 my-2">5–20% DV</p>
+      <p class="text-sm text-gray-600"> From chicken and veggies</p>
+    </div>
+  </div>
+</div>
+
+<!-- 💡 Floating Tips Button -->
+<div class="fixed bottom-10 right-10 z-50">
+  <button id="tipToggle" class="bg-yellow-300 hover:bg-yellow-400 text-black font-semibold px-5 py-3 rounded-full shadow-lg backdrop-blur-lg transition duration-300">
+    💡 Tips
+  </button>
+</div>
+
+<!-- 💬 Tips Panel -->
+<div id="tipsPanel" class="hidden fixed bottom-24 right-10 w-96 p-6 rounded-2xl shadow-2xl backdrop-blur-md bg-white/80 border border-yellow-200 text-gray-800 z-50">
+  <h3 class="text-xl font-bold mb-3">Pro Tips 🍽️</h3>
+  <ul class="list-disc list-inside space-y-2 text-sm">
+    <li><strong>Want more protein?</strong> Add a boiled egg or a spoon of Greek yogurt.</li>
+    <li><strong>Extra flavor?</strong> Marinate the chicken in soy sauce, lemon, and garlic for 30 mins before cooking.</li>
+    <li><strong>Swap rice</strong> for quinoa for extra fiber and micronutrients.</li>
+  </ul>
+</div>
+<script>
+  const tipToggle = document.getElementById('tipToggle');
+  const tipsPanel = document.getElementById('tipsPanel');
+
+  tipToggle.addEventListener('click', () => {
+    tipsPanel.classList.toggle('hidden');
+  });
+</script>
+
+<script>
+  const observers = document.querySelectorAll('.scroll-fade-up');
+
+  const revealOnScroll = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+      }
+    });
+  }, {
+    threshold: 0.1
+  });
+
+  observers.forEach(el => {
+    revealOnScroll.observe(el);
+  });
+</script>
+
+
+</body>
+</html>
